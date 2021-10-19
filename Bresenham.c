@@ -1,14 +1,12 @@
 #include<stdio.h>
 #include<graphics.h>
-#include<conio.h>
 #include<math.h>
-#include<dos.h>
 
 int i,x,y,dx,dy,a0,a1,b0,b1;
 float m;
 char A[15],B[15],slope[15];
 
-void slope0p1(int x0,int y0,int x1,int y1)
+int slope0p1(int x0,int y0,int x1,int y1)
 { int p;
   x=x0;
   y=y0;
@@ -28,7 +26,7 @@ void slope0p1(int x0,int y0,int x1,int y1)
   }
 }
 
-void slope1pinf(int x0,int y0,int x1,int y1)
+int slope1pinf(int x0,int y0,int x1,int y1)
 { int p;
   x=x0;
   y=y0;
@@ -48,7 +46,7 @@ void slope1pinf(int x0,int y0,int x1,int y1)
   }
 }
 
-void slope0n1(int x0,int y0,int x1,int y1)
+int slope0n1(int x0,int y0,int x1,int y1)
 { int p;
   x=x0;
   y=y0;
@@ -69,7 +67,7 @@ void slope0n1(int x0,int y0,int x1,int y1)
   }
 }
 
-void slopen1ninf(int x0,int y0,int x1,int y1)
+int slopen1ninf(int x0,int y0,int x1,int y1)
 { int p;
   y=y0;
   x1=2*x0-x1;
@@ -91,7 +89,7 @@ void slopen1ninf(int x0,int y0,int x1,int y1)
   }
 }
 
-void bresenham(int x0,int y0,int x1,int y1)
+int bresenham(int x0,int y0,int x1,int y1)
 { a0=x0;
   b0=y0;
   a1=x1;
@@ -114,7 +112,7 @@ void bresenham(int x0,int y0,int x1,int y1)
   { slope0p1(x0,y0,x1,y1); }
 }
 
-void frame()
+int frame()
 { for(i=0;i<640;i=i+160)
   { line(i,0,i,getmaxy()); }
   line(getmaxx(),0,getmaxx(),getmaxy());
@@ -123,7 +121,7 @@ void frame()
   line(0,getmaxy(),getmaxx(),getmaxy());
 }
 
-void main()
+int main()
 { int gd=DETECT,gm,i;
   initgraph(&gd,&gm,"C:\\TURBOC3\\BGI");
 
