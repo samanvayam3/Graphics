@@ -1,155 +1,196 @@
 #include<stdio.h>
-#include<graphics.h>
 #include<conio.h>
-#include<math.h>
+#include<graphics.h>
 #include<dos.h>
 
-int i,x,y,dx,dy,a0,a1,b0,b1;
-float m;
-char A[15],B[15],slope[15];
+int x,y,h,k,r,d;
+char A[15];
 
-void slope0p1(int x0,int y0,int x1,int y1)
-{ int p;
-  x=x0;
-  y=y0;
-  dx=x1-x0;
-  dy=y1-y0;
-  p=2*dy-dx;
-  while(x!=x1+1)
-  { putpixel(x,y,2);
-    delay(25);
-    if(p<=0)
-    { p=p+2*dy; }
-    else
-    { y=y+1;
-      p=p+2*dy-2*dx;
-    }
-    x++;
-  }
+void getcoordinates()
+{ delay(500);
+  outtextxy(20,70,"# Enter coordinates of center :-");
+  setlinestyle(0,0,1);
+  delay(500);
+  line(20,85,270,85);
+  delay(500);
+  outtextxy(20,105,"-> Input x=450, y=320 & r=100 for refrence.");
+  delay(500);
+  outtextxy(20,132,"Enter x - coordinate (h) : ");
+  gotoxy(30,9);
+  scanf("%d",&h);
+  outtextxy(20,148,"Enter y - coordinate (k) : ");
+  gotoxy(30,10);
+  scanf("%d",&k);
+  outtextxy(20,180,"Enter radius (r) : ");
+  gotoxy(22,12);
+  scanf("%d",&r);
+  setlinestyle(1,0,1);
+  delay(500);
+  line(20,205,320,205);
 }
 
-void slope1pinf(int x0,int y0,int x1,int y1)
-{ int p;
-  x=x0;
-  y=y0;
-  dx=x1-x0;
-  dy=y1-y0;
-  p=2*dx-dy;
-  while(y!=y1+1)
-  { putpixel(x,y,3);
-    delay(25);
-    if(p<=0)
-    { p=p+2*dx; }
-    else
-    { x=x+1;
-      p=p+2*dx-2*dy;
+void bresenhamcircle()
+{ setcolor(7);
+  setlinestyle(2,0,1);
+  delay(100);
+  line(h,k,h+r+30,k);
+  delay(100);
+  line(h,k,h+r,k+r);
+  delay(100);
+  line(h,k,h,k+r+30);
+  delay(100);
+  line(h,k,h-r,k+r);
+  delay(100);
+  line(h,k,h-r-30,k);
+  delay(100);
+  line(h,k,h-r,k-r);
+  delay(100);
+  line(h,k,h,k-r-30);
+  delay(100);
+  line(h,k,h+r,k-r);
+  setcolor(15);
+  y=r;
+  d=3-2*r;
+  for(x=0;x<=y;x++)
+  { delay(23);
+    putpixel(h+y,k+x,9); //octant-1
+    putpixel(h+x,k+y,10); //octant-2
+    putpixel(h-x,k+y,11); //octand-3
+    putpixel(h-y,k+x,12); //octant-4
+    putpixel(h-y,k-x,13); //Octant-5
+    putpixel(h-x,k-y,14); //Octant-6
+    putpixel(h+x,k-y,15); //Octant-7
+    putpixel(h+y,k-x,5); //Octant-8
+    if(d<0)
+    { d=d+4*x+6;
     }
-    y++;
+    else
+    { y--;
+      d=d+4*(x-y)+10;
+    }
   }
+  circle(h,k,1);
 }
 
-void slope0n1(int x0,int y0,int x1,int y1)
-{ int p;
-  x=x0;
-  y=y0;
-  dy=y1-y0;
-  x1=2*x0-x1;
-  dx=x1-x0;
-  p=2*dy-dx;
-  while(x!=x1+1)
-  { putpixel(2*x0-x,y,4);
-    delay(25);
-    if(p<=0)
-    { p=p+2*dy; }
-    else
-    { y=y+1;
-      p=p+2*dy-2*dx;
+void brcircle()
+{ y=r;
+  d=3-2*r;
+  for(x=0;x<=y;x++)
+  { delay(23);
+    putpixel(h+y,k+x,15); //octant-1
+    putpixel(h+x,k+y,15); //octant-2
+    putpixel(h-x,k+y,15); //octand-3
+    putpixel(h-y,k+x,15); //octant-4
+    putpixel(h-y,k-x,15); //Octant-5
+    putpixel(h-x,k-y,15); //Octant-6
+    putpixel(h+x,k-y,15); //Octant-7
+    putpixel(h+y,k-x,15); //Octant-8
+    if(d<0)
+    { d=d+4*x+6;
     }
-    x++;
-  }
-}
-
-void slopen1ninf(int x0,int y0,int x1,int y1)
-{ int p;
-  y=y0;
-  x1=2*x0-x1;
-  dx=x1-x0;
-  x=dx;
-  dy=y1-y0;
-  m=0-(float)dy/dx;
-  p=2*dx-dy;
-  while(y!=y1+1)
-  { putpixel(x1-x,y,3);
-    delay(25);
-    if(p<=0)
-    { p=p+2*dx; }
     else
-    { x=x+1;
-      p=p+2*dx-2*dy;
+    { y--;
+      d=d+4*(x-y)+10;
     }
-    y++;
   }
-}
-
-void bresenham(int x0,int y0,int x1,int y1)
-{ a0=x0;
-  b0=y0;
-  a1=x1;
-  b1=y1;
-  dx=x1-x0;
-  dy=y1-y0;
-  if(dx==0&&dy==0)
-  { m=100; }
-  else
-  { m=(float)dy/dx; }
-  if(m<-1)
-  { slopen1ninf(x0,y0,x1,y1); }
-  else if(m>=-1&&m<0)
-  { slope0n1(x0,y0,x1,y1); }
-  else if(m>=0&&m<1)
-  { slope0p1(x0,y0,x1,y1); }
-  else if(m>=1)
-  { slope1pinf(x0,y0,x1,y1); }
-  else
-  { slope0p1(x0,y0,x1,y1); }
+  circle(h,k,1);
 }
 
 void frame()
-{ for(i=0;i<640;i=i+160)
-  { line(i,0,i,getmaxy()); }
+{ line(0,0,getmaxx(),0);
+  line(0,0,0,getmaxy());
   line(getmaxx(),0,getmaxx(),getmaxy());
-  for(i=0;i<480;i=i+240)
-  { line(0,i,getmaxx(),i); }
   line(0,getmaxy(),getmaxx(),getmaxy());
 }
 
+void details()
+{ setlinestyle(1,0,1);
+  delay(500);
+  line(390,80,390,150);
+  delay(500);
+  line(400,160,600,160);
+  delay(500);
+  outtextxy(460,85,"# Details :-");
+  setlinestyle(0,0,1);
+  delay(500);
+  line(460,100,550,100);
+  sprintf(A,"C(%d,%d)",h,k);
+  delay(500);
+  outtextxy(410,115,"-> Centre : ");
+  outtextxy(510,115,A);
+  delay(500);
+  outtextxy(465,310,A);
+  delay(500);
+  outtextxy(410,135,"-> Radius : ");
+  sprintf(A,"%d",r);
+  outtextxy(510,135,A);
+  delay(500);
+  outtextxy(20,225,"# Coordinates by 8-way symmetry :-");
+  setlinestyle(0,0,1);
+  delay(500);
+  line(20,240,290,240);
+  delay(500);
+  outtextxy(550,360,"Octant-1");
+  delay(500);
+  outtextxy(20,260,"Octant-1 : (x,y)");
+  delay(500);
+  outtextxy(470,425,"Octant-2");
+  delay(500);
+  outtextxy(20,280,"Octant-2 : (y,x)");
+  delay(500);
+  outtextxy(370,425,"Octant-3");
+  delay(500);
+  outtextxy(20,300,"Octant-3 : (-x,y)");
+  delay(500);
+  outtextxy(285,360,"Octant-4");
+  delay(500);
+  outtextxy(20,320,"Octant-4 : (-y,x)");
+  delay(500);
+  outtextxy(285,280,"Octant-5");
+  delay(500);
+  outtextxy(20,340,"Octant-5 : (-y,-x)");
+  delay(500);
+  outtextxy(370,210,"Octant-6");
+  delay(500);
+  outtextxy(20,360,"Octant-6 : (-x,-y)");
+  delay(500);
+  outtextxy(470,210,"Octant-7");
+  delay(500);
+  outtextxy(20,380,"Octant-7 : (x,-y)");
+  delay(500);
+  outtextxy(550,275,"Octant-8");
+  delay(500);
+  outtextxy(20,400,"Octant-8 : (y,-x)");
+  setlinestyle(1,0,1);
+  delay(500);
+  line(200,255,200,410);
+}
+
 void main()
-{ int gd=DETECT,gm,i;
+{ int gd=DETECT,gm;
   initgraph(&gd,&gm,"C:\\TURBOC3\\BGI");
-
-  //Block(1,1):-
-  delay(1000);
-  outtextxy(38,20,"-: CGMT :-");
-  delay(1000);
-  outtextxy(10,50,"# Program - 5 :-");
-  delay(1000);
-  outtextxy(10,80,"Aim : To execute");
-  outtextxy(60,95,"Bresenham's");
-  outtextxy(50,110,"line drawing");
-  outtextxy(60,125,"algorithm.");
-  delay(1000);
-  outtextxy(50,155,"Ashish Singla");
-  outtextxy(65,165,"00520902719");
-  delay(1000);
-  outtextxy(8,200,"Lines drawn using");
-  outtextxy(8,215,"Bresenham's Algo ->");
-
-
-
-  bresenham(620,350,550,450);
-
-
-
+  frame();
+  delay(200);
+  outtextxy(115,20,"-: Circle (Bresenham's Circle Drawimg Algorithm) :-");
+  delay(200);
+  line(138,33,495,33);
+  setlinestyle(3,0,1);
+  delay(200);
+  line(40,50,600,50);
+  delay(200);
+  getcoordinates();
+  delay(200);
+  if((h==450)&&(k==320)&&(r==100))
+  { bresenhamcircle();
+    delay(200);
+    details();
+    delay(200);
+    line(20,430,300,430);
+  }
+  else
+  { brcircle(); }
+  delay(200);
+  outtextxy(20,450,"Press any key to EXIT ...");
   getch();
   closegraph();
 }
