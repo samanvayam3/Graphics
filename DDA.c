@@ -1,215 +1,169 @@
+#include<stdio.h>
 #include<graphics.h>
 #include<conio.h>
+#include<dos.h>
 
-int a0,a1,b0,b1;
-float m;
-char A[15],B[15],slope[15];
+int i=0;
 
-void plot(int x0,int y0,int x1,int y1)
-{ int i;
-  float x,y,dx,dy,steps;
-  a0=x0;
-  b0=y0;
-  a1=x1;
-  b1=y1;
-  dx=(float)(x1-x0);
-  dy=(float)(y1-y0);
-  m=dy/dx;
-  if(dx>=dy)
-  { steps=dx; }
-  else
-  { steps=dy; }
-  dx=dx/steps;
-  dy=dy/steps;
-  x=x0;
-  y=y0;
-  for(i=0;i<=steps;i++)
-  { putpixel(x,y,15);
-    x=x+dx;
-    y=y+dy;
-    delay(25);
+void frame()
+{ line(0,0,getmaxx(),0);
+  line(0,0,0,getmaxy());
+  line(0,getmaxy(),getmaxx(),getmaxy());
+  line(getmaxx(),0,getmaxx(),getmaxy());
+  line(0,30,getmaxx(),30);
+}
+
+void pause()
+{ outtextxy(10,450,"Press any key to contine ...");
+  getch();
+}
+
+void slide1()
+{ frame();
+  delay(250);
+  outtextxy(270,12,"-: Line :-");
+  delay(500);
+  outtextxy(10,40,"* (x1,y1) : (100,250)");
+  delay(500);
+  outtextxy(10,50,"* (x2,y2) : (250,100)");
+  delay(500);
+  line(100,250,250,100);
+  delay(500);
+  outtextxy(10,60,"* Translation : dx = 88");
+  outtextxy(10,70,"              : dy = 88");
+  delay(1000);
+  for(i=0;i<89;i++)
+  { frame();
+    outtextxy(270,12,"-: Line :-");
+    outtextxy(10,40,"* (x1,y1) : (100,250)");
+    outtextxy(10,50,"* (x2,y2) : (250,100)");
+    outtextxy(10,60,"* Translating : dx = 88");
+    outtextxy(10,70,"              : dy = 88");
+    line(100+i,250+i,250+i,100+i);
+    delay(23);
+    cleardevice();
   }
+  frame();
+  outtextxy(270,12,"-: Line :-");
+  outtextxy(15,50,"* (x1,y1) : (100,250)");
+  outtextxy(15,65,"* (x2,y2) : (250,100)");
+  outtextxy(15,80,"* Translated : dx = 88");
+  outtextxy(15,95,"             : dy = 88");
+  outtextxy(15,110,"* Scaling : 1.5x");
+  line(187,337,337,187);
+  delay(1000);
+  line(100*1.5,250*1.5,250*1.5,100*1.5);
+  delay(1000);
+  for(i=0;i<151;i++)
+  { frame();
+    outtextxy(270,12,"-: Line :-");
+    outtextxy(15,50,"* (x1,y1) : (100,250)");
+    outtextxy(15,65,"* (x2,y2) : (250,100)");
+    outtextxy(15,80,"* Translated : dx = 88");
+    outtextxy(15,95,"             : dy = 88");
+    outtextxy(15,110,"* Scaled : 1.5x");
+    outtextxy(15,125,"* Translating : dx = 150");
+    outtextxy(15,140,"              : dy = 0");
+    line(150+i,375,375+i,150);
+    delay(20);
+    cleardevice();
+  }
+  frame();
+  outtextxy(270,12,"-: Line :-");
+  outtextxy(15,50,"* (x1,y1) : (100,250)");
+  outtextxy(15,65,"* (x2,y2) : (250,100)");
+  outtextxy(15,80,"* Translated : dx = 88");
+  outtextxy(15,95,"             : dy = 88");
+  outtextxy(15,110,"* Scaled : 1.5x");
+  outtextxy(15,125,"* Translated : dx = 150");
+  outtextxy(15,140,"             : dy = 0");
+  line(150+i,375,375+i,150);
+}
+
+void slide2()
+{ outtextxy(265,12,"-: Circle :-");
+  outtextxy(15,50,"* Center : (350,457)");
+  outtextxy(15,65,"* Radius : 87");
+
+  for(i=350;i<401;i++)
+  { frame();
+    outtextxy(265,12,"-: Circle :-");
+    outtextxy(15,50,"* Center : (350,457)");
+    outtextxy(15,65,"* Radius : 87");
+    outtextxy(15,80,"* Translating to : (400,250)");
+    outtextxy(15,95,"* Scaling to : 2x");
+    putpixel(i,(-i*i)/500+330,15);
+    circle(i,(-i*i)/500+330,i%300);
+    delay(50);
+    cleardevice();
+  }
+  frame();
+  outtextxy(265,12,"-: Circle :-");
+  outtextxy(15,50,"* Center : (350,457)");
+  outtextxy(15,65,"* Radius : 87");
+  outtextxy(15,80,"* Translated to : (400,250)");
+  outtextxy(15,95,"* Scaled to : 2x");
+  putpixel(i,(-i*i)/400+330,15);
+  circle(i,(-i*i)/400+330,10+i/4);
+}
+
+void slide3()
+{ float i;
+  int j,pts[]={230,140,270,130,285,160,250,170,210,165,230,140};
+  frame();
+  outtextxy(264,12,"-: Polygon :-");
+  delay(500);
+  drawpoly(6,pts);
+  delay(500);
+  for(i=100;i<113;i++)
+  { frame();
+    outtextxy(264,12,"-: Polygon :-");
+    outtextxy(15,50,"* Vertices : {(230,140),(270,130),285,160),(250,170),(210,165)");
+    outtextxy(15,65,"* Scaled to : 1.12x");
+    for(j=0;j<12;j++)
+    { pts[j]=pts[j]*i/100; }
+    drawpoly(6,pts);
+    delay(150);
+    cleardevice();
+  }
+  frame();
+  outtextxy(264,12,"-: Polygon :-");
+  outtextxy(15,50,"* Vertices : {(230,140),(270,130),285,160),(250,170),(210,165)");
+  outtextxy(15,65,"* Scaled to : 1.12x");
+  drawpoly(6,pts);
+  delay(500);
+  for(i=1;i<16;i++)
+  { frame();
+    outtextxy(264,12,"-: Polygon :-");
+    outtextxy(15,50,"* Vertices : {(230,140),(270,130),285,160),(250,170),(210,165)");
+    outtextxy(15,65,"* Scaled to : 1.12x");
+    outtextxy(15,80,"* Translated to : dx=50");
+    outtextxy(15,95,"                : dy=50");
+    for(j=0;j<12;j++)
+    { pts[j]=pts[j]-i; }
+    drawpoly(6,pts);
+    delay(150);
+    cleardevice();
+  }
+  frame();
+  outtextxy(264,12,"-: Polygon :-");
+  outtextxy(15,50,"* Vertices : {(230,140),(270,130),285,160),(250,170),(210,165)");
+  outtextxy(15,65,"* Scaled to : 1.12x");
+  outtextxy(15,80,"* Translated to : dx=50");
+  outtextxy(15,95,"                : dy=50");
+  drawpoly(6,pts);
 }
 
 void main()
-{ int gd=DETECT,gm,i;
+{ int gd=DETECT,gm;
   initgraph(&gd,&gm,"C:\\TURBOC3\\BGI");
-
-  for(i=0;i<640;i=i+160)
-  { line(i,0,i,getmaxy()); }
-  line(getmaxx(),0,getmaxx(),getmaxy());
-  for(i=0;i<480;i=i+240)
-  { line(0,i,getmaxx(),i); }
-  line(0,getmaxy(),getmaxx(),getmaxy());
-
-  //Block(1,1):-
-  delay(1000);
-  outtextxy(38,20,"-: CGMT :-");
-  delay(1000);
-  outtextxy(10,50,"# Program - 4 :-");
-  delay(1000);
-  outtextxy(10,80,"Aim : To execute");
-  outtextxy(60,95,"DDA line");
-  outtextxy(60,110,"drawing");
-  outtextxy(60,125,"algorithm.");
-  delay(1000);
-  outtextxy(50,155,"Ashish Singla");
-  outtextxy(65,165,"00520902719");
-  delay(1000);
-  outtextxy(12,200,"Lines drawn using");
-  outtextxy(12,215,"DDA Algorithm --->");
-
-  //Block(1,2):-
-  delay(1000);
-  outtextxy(170,15,"* CASE - 1 :-");
-  delay(800);
-  outtextxy(170,40,"=> x0=y0=x1=y1");
-  delay(800);
-  plot(200,200,200,200);
-  setcolor(4);
-  circle(200,200,1);
-  setcolor(15);
-  delay(800);
-  circle(200,200,20);
-  delay(800);
-  sprintf(A,"A(%d,%d)",a0,b0);
-  outtextxy(200,120,A);
-  delay(800);
-  sprintf(B,"B(%d,%d)",a1,b1);
-  outtextxy(200,140,B);
-
-  //Block(1,3):-
-  delay(800);
-  outtextxy(330,15,"* CASE - 2 :-");
-  delay(800);
-  outtextxy(330,40,"=> x0=x1");
-  delay(800);
-  outtextxy(330,55,"=> y0!=y1");
-  setcolor(4);
-  circle(350,125,1);
-  circle(350,185,1);
-  setcolor(15);
-  plot(350,125,350,185);
-  delay(800);
-  sprintf(A,"A(%d,%d)",a0,b0);
-  outtextxy(340,110,A);
-  delay(800);
-  sprintf(slope,"Slope = %.2f",m);
-  outtextxy(360,150,slope);
-  delay(800);
-  sprintf(B,"B(%d,%d)",a1,b1);
-  outtextxy(340,195,B);
-
-  //Block(1,4):-
-  delay(800);
-  outtextxy(490,15,"* CASE - 3 :-");
-  delay(800);
-  outtextxy(490,40,"=> x0!=x1");
-  delay(800);
-  outtextxy(490,55,"=> y0=y1");
-  setcolor(4);
-  circle(500,155,1);
-  circle(600,155,1);
-  setcolor(15);
-  plot(500,155,600,155);
-  delay(800);
-  sprintf(slope,"Slope = %.2f",m);
-  outtextxy(520,110,slope);
-  delay(800);
-  sprintf(A,"A(%d,%d)",a0,b0);
-  outtextxy(490,140,A);
-  delay(800);
-  sprintf(B,"B(%d,%d)",a1,b1);
-  outtextxy(550,165,B);
-
-  //Block(2,1):-
-  delay(800);
-  outtextxy(10,260,"* CASE - 4 :-");
-  delay(800);
-  outtextxy(10,285,"=> Slope +ve");
-  delay(800);
-  outtextxy(10,300,"=> Slope > 1");
-  setcolor(4);
-  circle(20,350,1);
-  circle(80,450,1);
-  setcolor(15);
-  plot(20,350,80,450);
-  delay(800);
-  sprintf(A,"A(%d,%d)",a0,b0);
-  outtextxy(10,335,A);
-  delay(800);
-  sprintf(slope,"Slope = %.2f",m);
-  outtextxy(((a0+a1)/2)+5,((b0+b1)/2)-15,slope);
-  delay(800);
-  sprintf(B,"B(%d,%d)",a1,b1);
-  outtextxy(70,460,B);
-
-  //Block(2,2):-
-  delay(800);
-  outtextxy(170,260,"* CASE - 5 :-");
-  delay(800);
-  outtextxy(170,285,"=> Slope -ve");
-  delay(800);
-  outtextxy(170,300,"=> Slope > -1");
-  setcolor(4);
-  circle(310,350,1);
-  circle(190,450,1);
-  setcolor(15);
-  plot(310,350,190,450);
-  delay(800);
-  sprintf(A,"A(%d,%d)",a0,b0);
-  outtextxy(240,335,A);
-  delay(800);
-  sprintf(slope,"Slope = %.2f",m);
-  outtextxy(((a0+a1)/2)-80,((b0+b1)/2)-35,slope);
-  delay(800);
-  sprintf(B,"B(%d,%d)",a1,b1);
-  outtextxy(170,460,B);
-
-  //Block(2,3):-
-  delay(800);
-  outtextxy(330,260,"* CASE - 6 :-");
-  delay(800);
-  outtextxy(330,285,"=> Slope +ve");
-  delay(800);
-  outtextxy(330,300,"=> Slope < 1");
-  setcolor(4);
-  circle(330,350,1);
-  circle(465,450,1);
-  setcolor(15);
-  plot(330,350,465,450);
-  delay(800);
-  sprintf(A,"A(%d,%d)",a0,b0);
-  outtextxy(330,335,A);
-  delay(800);
-  sprintf(slope,"Slope = %.2f",m);
-  outtextxy(((a0+a1)/2)-20,((b0+b1)/2)-35,slope);
-  delay(800);
-  sprintf(B,"B(%d,%d)",a1,b1);
-  outtextxy(400,460,B);
-
-  //Block(2,4):-
-  delay(800);
-  outtextxy(490,260,"* CASE - 7 :-");
-  delay(800);
-  outtextxy(490,285,"=> Slope -ve");
-  delay(800);
-  outtextxy(490,300,"=> Slope < -1");
-  setcolor(4);
-  circle(620,350,1);
-  circle(550,450,1);
-  setcolor(15);
-  plot(620,350,550,450);
-  delay(800);
-  sprintf(A,"A(%d,%d)",a0,b0);
-  outtextxy(560,335,A);
-  delay(800);
-  sprintf(slope,"Slope = %.2f",m);
-  outtextxy(((a0+a1)/2)-90,((b0+b1)/2)-35,slope);
-  delay(800);
-  sprintf(B,"B(%d,%d)",a1,b1);
-  outtextxy(490,460,B);
-
+  slide1();
+  pause();
+  slide2();
+  pause();
+  cleardevice();
+  slide3();
+  outtextxy(10,450,"Press any key to EXIT ...");
   getch();
   closegraph();
 }
